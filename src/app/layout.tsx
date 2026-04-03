@@ -11,6 +11,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "SKYLINE_SAR",
   description: "// search_and_rescue intelligence platform",
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+  },
 };
 
 export default function RootLayout({

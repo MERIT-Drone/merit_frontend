@@ -25,9 +25,10 @@ interface SARMapProps {
   detections: Detection[];
   onDetectionClick: (det: Detection) => void;
   flyTarget?: FlyTarget | null;
+  detectionCount?: number;
 }
 
-export default function SARMap({ detections, onDetectionClick, flyTarget }: SARMapProps) {
+export default function SARMap({ detections, onDetectionClick, flyTarget, detectionCount }: SARMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -138,11 +139,12 @@ export default function SARMap({ detections, onDetectionClick, flyTarget }: SARM
         <span className="text-[#FFFFFFBB] text-[10px]">hdg: 247°</span>
         <span className="text-[#FFFFFFBB] text-[10px]">pattern: grid_sweep</span>
       </div>
-      {/* Progress bar */}
-      <div className="absolute top-3 right-12 flex items-center gap-3 px-3 py-2 bg-[#000000CC] z-10 pointer-events-none">
-        <span className="text-[#00D084] text-[10px] font-semibold">[68% searched]</span>
-        <span className="text-[#FFFFFFBB] text-[10px]">7 detections</span>
-      </div>
+      {/* Live detection count */}
+      {detectionCount !== undefined && (
+        <div className="absolute top-3 right-12 flex items-center gap-3 px-3 py-2 bg-[#000000CC] z-10 pointer-events-none">
+          <span className="text-[#00D084] text-[10px] font-semibold">{detectionCount} detection{detectionCount !== 1 ? 's' : ''}</span>
+        </div>
+      )}
     </div>
   );
 }

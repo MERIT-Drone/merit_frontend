@@ -21,10 +21,26 @@ export default function LoginPage() {
     setError('');
     if (!email || !password) { setError('// missing credentials'); return; }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    // TODO: swap for real JWT API call → setToken(jwt)
-    setToken('demo_session_' + Date.now());
-    router.push('/dashboard');
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setError(`// ${err.detail || 'authentication_failed'}`);
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setToken(data.access_token);
+      router.push('/dashboard');
+    } catch {
+      setError('// connection_failed: unable to reach server');
+      setLoading(false);
+    }
   }
 
   return (
